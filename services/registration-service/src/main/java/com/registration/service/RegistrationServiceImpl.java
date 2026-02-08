@@ -29,7 +29,7 @@ public class RegistrationServiceImpl implements RegistrationService{
         
         StudentRequestDTO student;
         try {
-            student=restTemplate.getForObject("http://STUDENT-SERVICE/students/"+requestDTO.getStudentId(),
+            student=restTemplate.getForObject("http://student-service/students/"+requestDTO.getStudentId(),
                 StudentRequestDTO.class);
         } catch (HttpClientErrorException.NotFound e) {
             throw new RuntimeException("Student not found with id: "+requestDTO.getStudentId());
@@ -37,7 +37,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
         CourseRequestDTO course;
         try {
-            course=restTemplate.getForObject("http://COURSE-SERVICE/courses/"+requestDTO.getCourseId(),
+            course=restTemplate.getForObject("http://course-service/courses/"+requestDTO.getCourseId(),
                 CourseRequestDTO.class);
         } catch (HttpClientErrorException.NotFound e) {
             throw new RuntimeException("Course not found with id: "+requestDTO.getCourseId());
@@ -64,7 +64,7 @@ public class RegistrationServiceImpl implements RegistrationService{
         StudentRequestDTO student;
 
         try {
-            student=restTemplate.getForObject("http://STUDENT-SERVICE/students/"+reg.getStudentId(), 
+            student=restTemplate.getForObject("http://student-service/students/"+reg.getStudentId(), 
                     StudentRequestDTO.class);
         } catch (HttpClientErrorException.NotFound e) {
             throw new RuntimeException("Student not found with id: "+reg.getStudentId());
@@ -73,7 +73,7 @@ public class RegistrationServiceImpl implements RegistrationService{
         CourseRequestDTO course;
 
         try {
-            course=restTemplate.getForObject("http://COURSE-SERVICE/courses/"+reg.getCourseId(), 
+            course=restTemplate.getForObject("http://course-service/courses/"+reg.getCourseId(), 
                     CourseRequestDTO.class);
         } catch (HttpClientErrorException.NotFound e) {
             throw new RuntimeException("Course not found with id: "+reg.getCourseId());
