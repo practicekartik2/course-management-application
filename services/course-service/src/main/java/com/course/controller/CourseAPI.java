@@ -32,7 +32,8 @@ public class CourseAPI {
 
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDTO> getCourseById(@PathVariable int courseId) {
-        CourseDTO course = courseService.getCourseById(courseId);
-        return new ResponseEntity<>(course, HttpStatus.OK);
+        // CourseDTO course = courseService.getCourseById(courseId);
+        // return new ResponseEntity<>(course, HttpStatus.OK);
+        throw new RuntimeException("Course Failure");
     }
 }
