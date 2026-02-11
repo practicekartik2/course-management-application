@@ -15,6 +15,8 @@ import com.registration.entity.Registration;
 import com.registration.exception.RegistrationException;
 import com.registration.repository.RegistrationRepository;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 @Service
 public class RegistrationServiceImpl implements RegistrationService{
 
@@ -23,6 +25,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 
     @Autowired
     public RegistrationRepository registrationRepository;
+
+    @Autowired
+    public ExternalServiceClient externalServiceClient;
 
     @Override
     public RegistrationResponseDTO registration(RegistrationRequestDTO requestDTO) {
@@ -61,23 +66,9 @@ public class RegistrationServiceImpl implements RegistrationService{
                         .orElseThrow(()->
                         new RegistrationException("Registration not found with id: "+registrationId));
 
-        StudentRequestDTO student;
 
-        try {
-            student=restTemplate.getForObject("http://student-service/students/"+reg.getStudentId(), 
-                    StudentRequestDTO.class);
-        } catch (HttpClientErrorException.NotFound e) {
-            throw new RuntimeException("Student not found with id: "+reg.getStudentId());
-        }
-
-        CourseRequestDTO course;
-
-        try {
-            course=restTemplate.getForObject("http://course-service/courses/"+reg.getCourseId(), 
-                    CourseRequestDTO.class);
-        } catch (HttpClientErrorException.NotFound e) {
-            throw new RuntimeException("Course not found with id: "+reg.getCourseId());
-        }
+        StudentRequestDTO student=externalServiceClient.callStudentService(reg.getStudentId());
+        CourseRequestDTO course=externalServiceClient.callCourseServic(reg.getCourseId());
        
         RegistrationResponseDTO response=new RegistrationResponseDTO();
         response.setRegistrationId(reg.getRegistrationId());
@@ -104,4 +95,37 @@ public class RegistrationServiceImpl implements RegistrationService{
         responseDTO.setSlot(registration.getSlot());
         return  responseDTO;
     }
+
+    // @CircuitBreaker(name="studentService", fallbackMethod="studentFallback")
+    // public StudentRequestDTO callStudentService(int studentId){
+
+    //         return restTemplate.getForObject("http://student-service/students/"+studentId,  
+    //             StudentRequestDTO.class);
+
+    // }
+
+    // @CircuitBreaker(name="courseService",fallbackMethod="courseFallback")
+    // public CourseRequestDTO callCourseService(int courseId){
+
+    //     return restTemplate.getForObject("http://course-service/courses/"+courseId, 
+    //             CourseRequestDTO.class);
+    // }
+
+    // public StudentRequestDTO studentFallback(int studentId, Exception ex){
+
+    //     StudentRequestDTO dto= new StudentRequestDTO();
+    //     dto.setStudentId(studentId);
+    //     dto.setStudentName("Student service unavailable");
+
+    //     return dto;
+    // }
+
+    // public CourseRequestDTO courseFallback(int courseId, Exception ex){
+    //     CourseRequestDTO dto=new CourseRequestDTO();
+
+    //     dto.setCourseId(courseId);
+    //     dto.setCourseName("Course service unavailable");
+    //     return dto;
+    // }
+   
 }
