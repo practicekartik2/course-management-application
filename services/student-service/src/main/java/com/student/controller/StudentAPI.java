@@ -33,8 +33,8 @@ public class StudentAPI {
 
     @GetMapping("/{studentId}")
     public ResponseEntity<StudentResponseDTO> getStudentById(@PathVariable int studentId){
-        // StudentResponseDTO student=studentService.getStudent(studentId);
-        // return new ResponseEntity<>(student,HttpStatus.OK); 
-        throw new RuntimeException("Failure ");
+        StudentResponseDTO student=studentService.getStudent(studentId);
+        return new ResponseEntity<>(student,HttpStatus.OK); 
+        
     }
 }

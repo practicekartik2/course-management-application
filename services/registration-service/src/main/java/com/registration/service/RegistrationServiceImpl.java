@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.registration.client.feignClient.CourseFeignClient;
+import com.registration.client.feignClient.StudentFeignClient;
 import com.registration.dto.CourseRequestDTO;
 import com.registration.dto.RegistrationRequestDTO;
 import com.registration.dto.RegistrationResponseDTO;
@@ -24,8 +26,14 @@ public class RegistrationServiceImpl implements RegistrationService{
     @Autowired
     public RegistrationRepository registrationRepository;
 
+    // @Autowired
+    // public RetryClientService retryClient;
+
     @Autowired
-    public RetryClientService retryClient;
+    public StudentFeignClient studentFeignClient;
+
+    @Autowired
+    public CourseFeignClient courseFeignClient;
 
     @Override
     public RegistrationResponseDTO registration(RegistrationRequestDTO requestDTO) {
@@ -65,8 +73,8 @@ public class RegistrationServiceImpl implements RegistrationService{
                         new RegistrationException("Registration not found with id: "+registrationId));
 
 
-        StudentRequestDTO student=retryClient.callStudentService(reg.getStudentId());
-        CourseRequestDTO course=retryClient.callCourseService(reg.getCourseId());
+        StudentRequestDTO student=studentFeignClient.getStudent(reg.getRegistrationId());
+        CourseRequestDTO course=courseFeignClient.getCourse(reg.getCourseId());
        
         RegistrationResponseDTO response=new RegistrationResponseDTO();
         response.setRegistrationId(reg.getRegistrationId());
