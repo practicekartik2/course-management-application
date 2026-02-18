@@ -17,6 +17,7 @@ import com.registration.entity.Registration;
 import com.registration.exception.RegistrationException;
 import com.registration.repository.RegistrationRepository;
 
+
 @Service
 public class RegistrationServiceImpl implements RegistrationService{
 
@@ -28,6 +29,9 @@ public class RegistrationServiceImpl implements RegistrationService{
 
     // @Autowired
     // public RetryClientService retryClient;
+
+    // @Autowired
+    // public FallbackService fallbackservice;
 
     @Autowired
     public StudentFeignClient studentFeignClient;
@@ -67,7 +71,7 @@ public class RegistrationServiceImpl implements RegistrationService{
 
     @Override
     public RegistrationResponseDTO getRegistrationById(int registrationId) {
-        // TODO Auto-generated method stub
+        
         Registration reg=registrationRepository.findById(registrationId)
                         .orElseThrow(()->
                         new RegistrationException("Registration not found with id: "+registrationId));

@@ -20,7 +20,7 @@ public class ExternalServiceClient {
         return callStudentService(studentId);
     }
 
-    @CircuitBreaker(name = "studentService", fallbackMethod = "studentFallback")
+    @CircuitBreaker(name = "studentService")
     public StudentRequestDTO callStudentService(int studentId) {
 
         System.out.println("Calling student service...");
@@ -37,7 +37,7 @@ public class ExternalServiceClient {
         return callCourseServic(courseId);
     }
     
-    @CircuitBreaker(name="courseService", fallbackMethod = "courseFallback")
+    @CircuitBreaker(name="courseService")
     public CourseRequestDTO callCourseServic(int courseId){
         System.out.println("Calling course service...");
         return restTemplate.getForObject("http://course-service/courses/"+courseId, CourseRequestDTO.class);
