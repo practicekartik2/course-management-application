@@ -10,8 +10,9 @@ spring:
       server:
         git:
           uri: https://github.com/practicekartik2/course-management-config.git
-          default-label: main
           clone-on-start: true
+          default-label: main
+          force-pull: true
 
 eureka:
   client:

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.registration.client.fallback.CourseFeignFallback;
 import com.registration.dto.CourseRequestDTO;
 
-@FeignClient(name="course-service", fallback=CourseFeignFallback.class)
+@FeignClient(name="course-service",fallback=CourseFeignFallback.class)
 public interface CourseFeignClient {
 
     @GetMapping("/courses/{courseId}")

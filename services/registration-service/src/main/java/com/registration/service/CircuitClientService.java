@@ -1,7 +1,6 @@
 package com.registration.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.registration.dto.CourseRequestDTO;
@@ -9,12 +8,12 @@ import com.registration.dto.StudentRequestDTO;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
-@Service
+
 public class CircuitClientService {
     @Autowired
     public RestTemplate restTemplate;
 
-    @CircuitBreaker(name="studentService",fallbackMethod="studentFallback")
+    @CircuitBreaker(name="studentService")
     public StudentRequestDTO callStudent(int studentId){
         System.out.println("Calling student service...");
         return restTemplate.getForObject(
@@ -29,7 +28,7 @@ public class CircuitClientService {
         return dto;
     }
 
-    @CircuitBreaker(name="courseService", fallbackMethod="courseFallback")
+    @CircuitBreaker(name="courseService")
     public CourseRequestDTO callCourse(int courseId){
         System.out.println("Calling Course service...");
         return restTemplate.getForObject(
