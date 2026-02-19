@@ -35,5 +35,6 @@ public class StudentAPI {
     public ResponseEntity<StudentResponseDTO> getStudentById(@PathVariable int studentId){
         StudentResponseDTO student=studentService.getStudent(studentId);
         return new ResponseEntity<>(student,HttpStatus.OK); 
+        
     }
 }

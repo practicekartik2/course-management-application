@@ -34,5 +34,6 @@ public class CourseAPI {
     public ResponseEntity<CourseDTO> getCourseById(@PathVariable int courseId) {
         CourseDTO course = courseService.getCourseById(courseId);
         return new ResponseEntity<>(course, HttpStatus.OK);
+               
     }
 }

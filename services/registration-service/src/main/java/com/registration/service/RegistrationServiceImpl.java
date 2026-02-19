@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.registration.client.feignClient.CourseFeignClient;
+import com.registration.client.feignClient.StudentFeignClient;
 import com.registration.dto.CourseRequestDTO;
 import com.registration.dto.RegistrationRequestDTO;
 import com.registration.dto.RegistrationResponseDTO;
@@ -14,6 +16,7 @@ import com.registration.dto.StudentRequestDTO;
 import com.registration.entity.Registration;
 import com.registration.exception.RegistrationException;
 import com.registration.repository.RegistrationRepository;
+
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService{
@@ -23,6 +26,18 @@ public class RegistrationServiceImpl implements RegistrationService{
 
     @Autowired
     public RegistrationRepository registrationRepository;
+
+    // @Autowired
+    // public RetryClientService retryClient;
+
+    // @Autowired
+    // public FallbackService fallbackservice;
+
+    @Autowired
+    public StudentFeignClient studentFeignClient;
+
+    @Autowired
+    public CourseFeignClient courseFeignClient;
 
     @Override
     public RegistrationResponseDTO registration(RegistrationRequestDTO requestDTO) {
@@ -56,28 +71,14 @@ public class RegistrationServiceImpl implements RegistrationService{
 
     @Override
     public RegistrationResponseDTO getRegistrationById(int registrationId) {
-        // TODO Auto-generated method stub
+        
         Registration reg=registrationRepository.findById(registrationId)
                         .orElseThrow(()->
                         new RegistrationException("Registration not found with id: "+registrationId));
 
-        StudentRequestDTO student;
 
-        try {
-            student=restTemplate.getForObject("http://student-service/students/"+reg.getStudentId(), 
-                    StudentRequestDTO.class);
-        } catch (HttpClientErrorException.NotFound e) {
-            throw new RuntimeException("Student not found with id: "+reg.getStudentId());
-        }
-
-        CourseRequestDTO course;
-
-        try {
-            course=restTemplate.getForObject("http://course-service/courses/"+reg.getCourseId(), 
-                    CourseRequestDTO.class);
-        } catch (HttpClientErrorException.NotFound e) {
-            throw new RuntimeException("Course not found with id: "+reg.getCourseId());
-        }
+        StudentRequestDTO student=studentFeignClient.getStudent(reg.getRegistrationId());
+        CourseRequestDTO course=courseFeignClient.getCourse(reg.getCourseId());
        
         RegistrationResponseDTO response=new RegistrationResponseDTO();
         response.setRegistrationId(reg.getRegistrationId());
@@ -104,4 +105,5 @@ public class RegistrationServiceImpl implements RegistrationService{
         responseDTO.setSlot(registration.getSlot());
         return  responseDTO;
     }
+   
 }
