@@ -34,12 +34,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CourseException.class)
     public ResponseEntity<Map<String, Object>> handleCourseException(CourseException ex) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
-        response.put("timestamp", LocalDateTime.now());
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)   
+                    .body(Map.of(
+                        "message", ex.getMessage(),
+                        "status", 404
+                    ));
 
     }
 

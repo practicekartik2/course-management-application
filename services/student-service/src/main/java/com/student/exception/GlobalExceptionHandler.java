@@ -37,13 +37,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(StudentException.class)
     public ResponseEntity<Map<String, Object>> handleStudentException(StudentException ex){
-        Map<String, Object> response=new HashMap<>();
-
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", ex.getMessage());
-        response.put("timestamp", LocalDateTime.now());
-
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)  
+                    .body(Map.of(
+                        "message", ex.getMessage(),
+                        "status", HttpStatus.NOT_FOUND.value()
+                    ));
     }
 
     @ExceptionHandler(Exception.class)

@@ -1,9 +1,12 @@
-package com.registration.dto;
+package com.course.dto;
 
-public class CourseRequestDTO {
+public class CourseResponseDTO {
+    
     private int courseId;
     private String courseName;
+    private String description;
     private int duration;
+    private int fees;
     
 
     /**
@@ -35,6 +38,20 @@ public class CourseRequestDTO {
     }
 
     /**
+     * @return String return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
      * @return int return the duration
      */
     public int getDuration() {
@@ -46,6 +63,20 @@ public class CourseRequestDTO {
      */
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    /**
+     * @return int return the fees
+     */
+    public int getFees() {
+        return fees;
+    }
+
+    /**
+     * @param fees the fees to set
+     */
+    public void setFees(int fees) {
+        this.fees = fees;
     }
 
 }

@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class CourseDTO {
-    private int courseId;
+public class CourseRequestDTO {
     @NotBlank
     @Pattern(regexp="^[A-Z][A-Za-z0-9 ]{2,24}$",message="Course name should be length of 3 to 15 characters long")
     private String courseName;
@@ -18,19 +17,7 @@ public class CourseDTO {
     @NotNull
     private int fees;
 
-    /**
-     * @return int return the courseId
-     */
-    public int getCourseId() {
-        return courseId;
-    }
 
-    /**
-     * @param courseId the courseId to set
-     */
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
 
     /**
      * @return String return the courseName
@@ -86,6 +73,11 @@ public class CourseDTO {
      */
     public void setFees(int fees) {
         this.fees = fees;
+    }
+
+    public void setCourseId(int courseId) {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'setCourseId'");
     }
 
 }
