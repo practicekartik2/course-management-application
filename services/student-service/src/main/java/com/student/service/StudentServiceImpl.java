@@ -1,9 +1,13 @@
 package com.student.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.student.dto.StudentRequestDTO;
 import com.student.dto.StudentResponseDTO;
+import com.student.dto.StudentUpdateDTO;
 import com.student.entity.Student;
 import com.student.exception.StudentException;
 import com.student.repository.StudentRepository;
@@ -37,8 +41,34 @@ public class StudentServiceImpl implements StudentService{
                         new StudentException("Student not found with id: "+studentId));
                 
     }
+
+    @Override
+    public List<StudentResponseDTO> getAllStudents() {
+        List<Student> students=studentRepository.findAll();
+        return students.stream()
+                .map(this::convertTOResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public StudentResponseDTO updateStudentDetails(StudentUpdateDTO updateDTO, int studentId) {
+        Student student=studentRepository.findById(studentId)
+                                    .orElseThrow(()->
+                                        new StudentException("Student not found with id: "+studentId));
+                            
+        student.setEmail(updateDTO.getEmail());
+        student.setPhoneNumber(updateDTO.getPhoneNumber());
+        Student updaStudent=studentRepository.save(student);
+        return convertTOResponseDTO(updaStudent);
+    }
+
+    @Override
+    public void deleteStudent(int studentId) {
+        studentRepository.deleteById(studentId);
+        System.out.println("Student Deleted");
+    }
     
-    public StudentResponseDTO convertTOResponseDTO(Student student){
+        public StudentResponseDTO convertTOResponseDTO(Student student){
         StudentResponseDTO responseDTO=new StudentResponseDTO();
         responseDTO.setStudentId(student.getStudentId());
         responseDTO.setStudentName(student.getStudentName());
@@ -48,5 +78,4 @@ public class StudentServiceImpl implements StudentService{
 
         return responseDTO;
     }
-    
 }

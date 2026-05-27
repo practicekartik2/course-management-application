@@ -8,51 +8,22 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-public class RegistrationRequestDTO {
-    @NotNull(message="Provide studentId")
-    private int studentId;
-    @NotNull(message="Provide CourseId")
-    private int courseId;
-    
+public class RegistrationUpdateDTO {
+
     @NotNull
-    @FutureOrPresent(message="Training start date must be present or future")
+    @FutureOrPresent(message="Training start date ust be present or future")
     private LocalDate startDate;
+
     @NotNull
     @Future(message="Training end date must be future date")
     private LocalDate endDate;
+
     @NotBlank
-    @Pattern(regexp="^(?i)(Morning|Afternoon|Evening)$", message="Choose valid slot among Morning, Afternoon, Evening")
+    @Pattern(regexp="^(?i)(Morning | Afternoon | Evening)$",
+            message="Choose valid slot among Morning, Afternoon, Evening")
     private String slot;
+
     
-
-    /**
-     * @return int return the studentId
-     */
-    public int getStudentId() {
-        return studentId;
-    }
-
-    /**
-     * @param studentId the studentId to set
-     */
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-    /**
-     * @return int return the courseId
-     */
-    public int getCourseId() {
-        return courseId;
-    }
-
-    /**
-     * @param courseId the courseId to set
-     */
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
-
 
     /**
      * @return LocalDate return the startDate

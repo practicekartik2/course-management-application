@@ -24,17 +24,15 @@ public class GlobalExceptionHandler {
             );
 
         Map<String, Object> responses=new HashMap<>();
-
         responses.put("status", HttpStatus.BAD_REQUEST.value());
         responses.put("message", "Validation failed");
         responses.put("error", filedErrors);
         responses.put("timestamp", LocalDateTime.now());
 
-
         return ResponseEntity.badRequest().body(responses);
     }
 
-        @ExceptionHandler(RegistrationException.class)
+    @ExceptionHandler(RegistrationException.class)
     public ResponseEntity<Map<String, Object>> handleRegistrationException(RegistrationException ex) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.NOT_FOUND.value());
@@ -45,15 +43,44 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGeneralException(Exception ex) {
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        response.put("message", "Internal Server Error");
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<Map<String, Object>> handleBusinessException(BusinessException ex){
+        Map<String, Object> response=new HashMap<>();
+        response.put("status", HttpStatus.NOT_FOUND.value());
+        response.put("error", ex.getMessage());
         response.put("timestamp", LocalDateTime.now());
 
-        return ResponseEntity.internalServerError().body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
+    }
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<?> handleServiceDownException(ServiceUnavailableException ex){
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(Map.of(
+                    "message",ex.getMessage(),
+                    "status", 503
+                ));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleNotFoundException(NotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                    "status", 404,
+                    "message", ex.getMessage()
+                    
+                ));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleAll (Exception ex){
+        ex.printStackTrace();
+        return ResponseEntity.status(500).body(
+            Map.of(
+                "message",ex.getMessage(),
+                "status",500
+            )
+        );
     }
 }

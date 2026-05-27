@@ -1,5 +1,6 @@
-spring:
-  cloud:
-    openfeign:
-      circuitbreaker:
-        enabled: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      studentService:
+        ignore-exceptions:
+          - com.registration.exception.NotFoundException
