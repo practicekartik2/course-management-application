@@ -4,12 +4,16 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.registration.client.fallback.StudentFeignFallback;
-import com.registration.dto.StudentRequestDTO;
+import com.registration.client.config.FeignClientConfig;
+import com.registration.client.fallback.StudentFeignFallbackFactory;
+import com.registration.dto.StudentDTO;
 
-@FeignClient(name="student-service", fallback=StudentFeignFallback.class)
+@FeignClient(name="student-service", 
+            configuration=FeignClientConfig.class,
+            fallbackFactory=StudentFeignFallbackFactory.class
+            )
 public interface StudentFeignClient {
 
     @GetMapping("/students/{studentId}")
-    StudentRequestDTO getStudent(@PathVariable int studentId);
+    StudentDTO getStudent(@PathVariable int studentId);
 }

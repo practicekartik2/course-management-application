@@ -1,9 +1,8 @@
 package com.registration.dto;
 
-public class StudentRequestDTO {
+public class StudentDTO {
     private int studentId;
     private String studentName;
-
 
     /**
      * @return int return the studentId
